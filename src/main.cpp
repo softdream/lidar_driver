@@ -5,7 +5,8 @@
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
-#include "datatype.h"
+
+#include "dataType.h"
 #include "laserDriver.h"
 #include "timestamp.h"
 #include <fstream>
@@ -24,6 +25,8 @@ void ctrlc(int)
 int main()
 {
 	std::cout<<"progress begins ..."<<std::endl;
+
+	slam::sensor::LaserScan scan;
 
 	long previous_time = 0;
 	long current_time = 0;
@@ -108,7 +111,7 @@ int main()
 						}
 					}
 					
-					publish_scan( angle_compensate_nodes, angle_compensate_nodes_count, \
+					publish_scan( angle_compensate_nodes, scan, angle_compensate_nodes_count, \
 						        current_time, ( double )( delta_time * 0.001 ), inverted, angle_min, angle_max, 8.0, scan_num );
 				}
 				else{
@@ -123,7 +126,7 @@ int main()
 					angle_min = DEG2RAD( getAngle( nodes[start_node] ) );
 					angle_max = DEG2RAD( getAngle( nodes[end_node] ) );
 
-					publish_scan( nodes, count, current_time, ( double )( delta_time * 0.001 ), inverted, angle_min, angle_max, 8.0, scan_num );
+					publish_scan( nodes, scan, count, current_time, ( double )( delta_time * 0.001 ), inverted, angle_min, angle_max, 8.0, scan_num );
 				}
 			}
 			else if( op_result == RESULT_OPERATION_FAIL ){

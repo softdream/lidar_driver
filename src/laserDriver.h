@@ -3,7 +3,7 @@
 
 #include <limits>
 #include "rplidar.h"
-#include "datatype.h"
+#include "dataType.h"
 #include <iostream>
 #include <string.h>
 
@@ -49,6 +49,7 @@ bool checkRPLIDARHealth(RPlidarDriver * drv)
 
 
 void publish_scan( rplidar_response_measurement_node_hq_t *nodes, \
+		   slam::sensor::LaserScan &scan_msg,		   
 		   size_t node_count, \
 		   uint32_t time_start,\
 		   double scan_time, bool inverted,\
@@ -56,11 +57,9 @@ void publish_scan( rplidar_response_measurement_node_hq_t *nodes, \
 		   float max_distance,\
 		   uint32_t frame_id )
 {
-	int scan_count = 0;
-	LidarData scan_msg;
-	scan_msg.time_stamp = time_start;
-	scan_msg.frame_id = frame_id;
-	scan_count ++;
+	
+	//scan_msg.time_stamp = time_start;
+	//scan_msg.frame_id = frame_id;
 	
 	bool reversed = ( angle_max > angle_min );
 	if( reversed ){
@@ -77,8 +76,6 @@ void publish_scan( rplidar_response_measurement_node_hq_t *nodes, \
 	scan_msg.scan_time = scan_time;
 	scan_msg.time_increment = scan_time / ( double )( node_count - 1 );
 	
-	scan_msg.frame_id = frame_id;	
-
 	scan_msg.range_min = 0.15;
 	scan_msg.range_max = max_distance ;//8.0
 
@@ -109,8 +106,8 @@ void publish_scan( rplidar_response_measurement_node_hq_t *nodes, \
 	}
 
 	/* 打印测试结果 */
-	std::cout << "frame_id: " << scan_msg.frame_id<<std::endl;
-	std::cout << "time_stamp: "<< scan_msg.time_stamp<<std::endl;
+	//std::cout << "frame_id: " << scan_msg.frame_id<<std::endl;
+	//std::cout << "time_stamp: "<< scan_msg.time_stamp<<std::endl;
 	std::cout << " angle_max: " << scan_msg.angle_max << " angle_min: " << scan_msg.angle_min <<" angle_increment: "<<scan_msg.angle_increment<< std::endl;
 	std::cout << " scan_time：" << scan_msg.scan_time << " time_increment: " << scan_msg.time_increment << std::endl;
 	/*for (size_t i = 0; i < node_count; i++){
